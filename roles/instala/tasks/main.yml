@@ -1,0 +1,48 @@
+---
+- name: Instala repo do zabbix  
+  become: yes
+  yum:
+    name: '{{ repo_zabbix }}'
+    state: present
+    
+- name: Limpeza cache do yum
+  become: yes
+  shell: yum clean all
+  args:
+    warn: false
+
+- name: Instala agente do zabbix
+  become: yes
+  yum:
+    name: '{{ agente }}'
+    state: latest
+
+- name: Configura arquivo zabbix-agent2.conf
+  become: yes
+  lineinfile:
+    dest: '{{ arquivo_config }}'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+  with_items:
+    - { regexp: '^Server=127.0.0.1', line: 'Server={{ servidor_zabbix }}' }
+    - { regexp: '^ServerActive=127.0.0.1', line: 'ServerActive={{ servidor_zabbix }}' }
+    - { regexp: '^# Plugins.SystemRun.LogRemoteCommands=0', line: 'Plugins.SystemRun.LogRemoteCommands=1' }
+    - { regexp: '^Hostname=Zabbix server', line: 'Hostname={{ ansible_nodename }}' }
+  
+
+- name: habilita e inicia `'{{ agente }}'
+  become: yes
+  systemd:
+    name: '{{ agente }}'
+    daemon_reload: yes
+    state: started
+    enabled: yes
+    masked: no
+
+- name: Remove agente antigo se existir
+  become: yes
+  yum:
+    name: zabbix-agent
+    state: absent
+  when: remove_antigo
+

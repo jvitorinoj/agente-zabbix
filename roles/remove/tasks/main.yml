@@ -1,0 +1,6 @@
+---
+- name: Remove Zabbix
+  become: yes
+  yum:
+    name: zabbix-agent2
+    state: absent

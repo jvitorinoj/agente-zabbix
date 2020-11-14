@@ -1,0 +1,8 @@
+[servidor]
+servidorzabbix
+
+[agentes]
+servidor1
+servidor2
+servidor3
+

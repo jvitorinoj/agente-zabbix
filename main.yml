@@ -1,0 +1,9 @@
+---
+ - name: Instala ou atualiza agente do zabbix
+   hosts: all
+   
+   roles:
+     - { role: remove, when: 'inventory_hostname in groups["agentes"]'}
+     - { role: instala, when: 'inventory_hostname in groups["agentes"]'}
+     - { role: teste, when: 'inventory_hostname in groups["servidor"]'}
+

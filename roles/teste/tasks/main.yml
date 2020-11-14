@@ -1,0 +1,6 @@
+---
+- name: Testa conexão do zabbix com o agente
+  when: inventory_hostname in groups['servidor'] 
+  shell: zabbix_get -s '{{ item }}' -k"system.uptime"
+  with_items:
+    - "{{ groups['agentes'] }}"
