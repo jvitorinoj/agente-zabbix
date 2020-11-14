@@ -33,7 +33,7 @@ Exemplo de execução do script
 
 ```sh
 $ git clone $this_repo
-$ cd kubernetes
+$ cd agente-zabbix
 $ ansible-playbook -i hosts main -u usuario_permissao_sudo -k -vv --become
 ```
 
